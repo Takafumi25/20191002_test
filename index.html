@@ -1,7 +1,99 @@
-<p>master</p>
-<p>２</p>
-<p>３</p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+// （1）Web Storageの実装確認
+if (typeof sessionStorage === 'undefined') {
+  window.alert("このブラウザはWeb Storage機能が実装されていません");
+} else {
+  window.alert("このブラウザはWeb Storage機能を実装しています--");
+ // var storage = sessionStorage;
+ //アプリで使えるよう変更 
+ var storage = localStorage;
+
+// （2）sessionStorageへの格納
+  function setsessionStorage() {
+
+    var key = document.getElementById("textkey").value;
+    var value = document.getElementById("textdata").value;
+
+    // 値の入力チェック
+    if (key && value) {
+      //storage.setItem(key, value);
+      localStorage.setItem(key, value);
+    }
+
+    key = "";
+    value = "";
+
+    viewStorage();
+  }
+
+// （3）sessionStorageからのデータの取得と表示
+  function viewStorage() {
+
+    var list = document.getElementById("list")
+    while (list.firstChild) list.removeChild(list.firstChild);
+
+    // sessionStorageすべての情報の取得
+    for (var i=0; i < storage.length; i++) {
+      var _key = storage.key(i);
+   
+      // sessionStorageのキーと値を表示
+      var tr = document.createElement("tr");
+      var td1 = document.createElement("td");
+      var td2 = document.createElement("td");
+      list.appendChild(tr);
+      tr.appendChild(td1);
+      tr.appendChild(td2);
+      td1.innerHTML = _key;
+      //td2.innerHTML = storage.getItem(_key);
+      td2.innerHTML = localStorage.getItem(_key);
+    }
+  }
+
+// （4）sessionStorageから削除
+  function removeStorage() {
+    var key = document.getElementById("textkey").value;
+    //storage.removeItem(key);
+    localStorage.removeItem(key);
+    key = "";
+    viewStorage();
+  }
+
+// （5）sessionStorageからすべて削除
+  function removeallStorage() {
+    //storage.clear();
+    localStorage.clear();
+    viewStorage();
+  }
+
+// （6）起動時に以前の情報を表示
+window.onload = function(){
+  viewStorage();
+}
+
+}
+</script>
+
+</header>
+
+<section id="main">
+  Keyword：<input id="textkey" type="text" value=""/><br>
+  Task：<input id="textdata" type="text" /><br>
+  <button id="button" onclick="setsessionStorage()">save</button>
+  <button id="button" onclick="removeStorage()">delete</button>
+  <button id="button" onclick="removeallStorage()">all delete</button>
+<br><br>
+
+  <table border='1' cellspacing='0' cellpadding='10'>
+    <tr>
+      <th>Keyword</th><th>Task</th>
+    </tr>
+    <tbody id="list">
+    </tbody>
+  </table>
+
+
+</section>
+</html>
